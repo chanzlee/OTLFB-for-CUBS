@@ -1,0 +1,26 @@
+## CORE REQUIREMENTS
+dj-database-url==0.5.0                       # DB config via ENV vars
+Django==2.2.13                               # Web framework
+django-bootstrap4==0.0.7                     # Bootstrap 4 support
+gunicorn==19.9.0                             # Threaded WSGI server
+psycopg2-binary>=2.7.7                       # Postgres connector
+pytz==2018.9                                 # Timezone support
+whitenoise==4.1.2                            # Serve static files via app server
+django-extensions==2.1.4                     # Various Django extras
+ipython==7.2.0                               # Better Django shell experience
+django-bootstrap-datepicker-plus==3.0.5      # Bootstrap datepicker support
+python-dateutil==2.7.5                       # Because datetimes are terrible
+django-formtools==2.1                        # Form Wizards
+django-tz-detect==0.2.9                      # Detect end user's timezone
+requests==2.21.0                             # to easily make a post
+django-dynamic-formsets==0.0.8               # for javascript formsets
+
+## PRODUCTION REQUIREMENTS
+celery==4.2.1                                # asynchronous worker tasks
+redis==3.4.1                                 # driver to support connecting to Redis
+gevent==1.4.0                                # Event-driven web server patch
+raven==6.10.0                                # Sentry connector
+six==1.12                                    # Data Analytics
+pycryptodome==3.7.3                          # Data Analytics
+PyCap                                        # RedCAP library
+django-session-timeout                       # for controlling timeout amount

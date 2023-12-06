@@ -1,0 +1,141 @@
+{% extends 'base.html' %}
+
+{% load bootstrap4 %}
+
+{% block content %}
+  <div class="container">
+    {% autoescape off %}{% bootstrap_messages %}{% endautoescape %}
+    <div class="row">
+      <div class="col-12">
+        <form action="" method="post">
+          <h3>{% block title %}Welcome{% endblock %}</h3>
+          <p>
+            For this exercise, you will be asked about your use of various substances (e.g., alcohol, cannabis,
+            recreational drugs, etc.) over the past {{ request.session.days }}  days. You will be asked about medical
+            and recreational use of cannabis, as well as any substances you take recreationally. You will be entering
+            responses into a calendar that is programmed to show you the last {{ request.session.days }}  days.
+          </p>
+          <p>
+            The page you are on now is to help you remember what you did on a certain day. [You will not enter the
+            substances you have used until the next page.] To complete this page, please also use personal items such as
+            text messages or your personal calendar to help you remember. You can mark any memorable events that occurred
+            (e.g. birthdays, holidays, parties, concert, camping trip) by clicking the box that says <b>“Date of important or
+            memorable event in the last 2 weeks”</b> and choosing the date it occurred from the calendar that will appear,
+            and then clicking the box that says <b>“Event name”</b> and naming the event (e.g., “Birthday” or “Red Rocks
+            concert.”) Then click <b>"Add Marker."</b> This event will now show up on the next page as well as this page.
+          </p>
+          <p>
+            Once you click <b>“Next page”</b> below, you will go to the page where you enter the substances you’ve used. For
+            each day on the calendar you will click <b>"Enter Substances"</b> and check the boxes next to the listed substances
+            to indicate all substances you used that day. Then, you will be prompted to answer more detailed questions
+            related to each item that you selected (e.g., What type of tobacco did you use? How many cigarettes did
+            you smoke?). When you can't remember certain days or details perfectly, it is okay. For example, if you had
+            about 8-10 drinks last Thursday or Friday but can't be sure, just give it your best guess. What is important
+            is that 8 or 10 drinks is very different than 1 or 20 drinks.
+          </p>
+          <p>
+            “Once you have added markers and entered substances for a particular day, please press <b>"Submit"</b> for
+            that day. Note, if you made a mistake on any day on the calendar, you can press "Re-Enter Substances" to
+            re-do all of your responses for that day. Warning: Pressing <b>"Re-enter Substances"</b> will erase all of
+            your responses for that particular day and you will be asked to Re-enter your substance use for that day.
+            After you have completed all days to the best of your knowledge, please press <b>"Submit all responses"</b>.
+          </p>
+          <p>The survey should take you about 20 minutes. <b>Please, try to be as accurate as possible.</b> Thank you
+            for your help! </p>
+
+          <div class="table-responsive">
+            <table class="table table-condensed table-bordered">
+              <tbody>
+              {% for k, v in markers.items %}
+                {% if forloop.first or k|date:"w" == "0" %}
+                  <tr>
+                  {# Iterate over the first few days of the week to get to the first day #}
+                  {% if forloop.first %}
+                    {% with k|date:"w"|add:0 as day %}
+                      {% for item in "x"|rjust:day %}
+                        <td></td>
+                      {% endfor %}
+                    {% endwith %}
+                  {% endif %}
+                {% endif %}
+              <td class="agenda-date" style="{% if k|date:"d"|add:0 < 8 %}border-top:3px solid black; {% endif %}
+                {% if k|date:"d"|add:0 == 1 and k|date:"w"|add:0 != 0 %}border-left:3px solid black; {% endif %}">
+                <div>
+                  <div class="dayofmonth">{{ k|date:"d" }}</div>
+                  <div class="dayofweek">{{ k|date:"l" }}</div>
+                  <div class="shortdate text-muted">{{ k|date:"F" }}, {{ k|date:"Y" }}</div>
+                  <div class="agenda-events">
+                    {% for item in v.markers %}
+                      <div class="agenda-event">
+                        - {{ item }}
+                      </div>
+                    {% endfor %}
+                  </div>
+                </div>
+              </td>
+              {% if forloop.last or k|date:"w"|add:0 == 6 %}
+                </tr>
+              {% endif %}
+              {% endfor %}
+              </tbody>
+            </table>
+          </div>
+
+          {% csrf_token %}
+          {{ form.media }}
+          {% bootstrap_form form layout='inline' size='lg' %}
+          {% bootstrap_button button_type='submit' content='Add Marker' button_class='btn-info' name='add' %}
+          <div  id="continue">
+            {% bootstrap_button button_type='submit' content='Next Page' button_class='btn-success' name='done' %}
+          </div>
+        </form>
+      </div>
+
+    </div>
+  </div>
+
+{% endblock %}
+
+{% block css %}
+  <style>
+    #continue {
+      margin-top: 60px;
+      margin-left: auto;
+      margin-right: 0;
+      float: right;
+    }
+
+    /* Dates */
+    .agenda .agenda-date {
+      width: 170px;
+    }
+
+    .agenda .agenda-date .dayofmonth {
+      width: 40px;
+      font-size: 30px;
+      line-height: 30px;
+      float: left;
+      text-align: right;
+      margin-right: 10px;
+    }
+
+    .agenda .agenda-date .dayofweek {
+      font-size: 0.75em;
+    }
+
+    .agenda .agenda-date .shortdate {
+      font-size: 0.75em;
+    }
+
+    /* Events */
+    .agenda .agenda-events {
+    }
+
+    .agenda .agenda-events .agenda-event {
+    }
+    .container{
+      margin-top: 80px;
+      margin-bottom: 80px;
+    }
+  </style>
+{% endblock %}

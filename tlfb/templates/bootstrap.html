@@ -1,0 +1,52 @@
+{% load bootstrap4 %}
+{% load i18n %}
+{% load tz_detect %}
+{% load staticfiles %}
+
+{% get_current_language as LANGUAGE_CODE %}
+<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE|default:'en_us' }}">
+
+<head>
+
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  {% load static %}
+  <link rel="apple-touch-icon" href="{% static 'cuchange-icon.png' %}"/>
+  <link rel="shortcut icon" href="{% static 'favicon.ico' %}"/>
+
+  <!-- Bootstrap CSS -->
+  {% bootstrap_css %}
+  {% bootstrap_javascript jquery='full' %}
+
+  <!-- Bootstrap Form Helper -->
+  <link href="{% static 'css/bootstrap-formhelpers.min.css'%}" rel="stylesheet" media="screen">
+  <script src="{% static 'js/bootstrap-formhelpers.min.js' %}" ></script>
+
+  <script src="{% static 'dynamic_formsets/jquery.formset.js' %}" ></script>
+  <link href="https://use.fontawesome.com/releases/v5.0.8/css/all.css" rel="stylesheet">
+  {% tz_detect %}
+
+  <title>TLFB - {% block title %}{% endblock %}</title>
+  {% block css %}
+  {% endblock %}
+
+</head>
+
+<body>
+{% block before_content %}{% endblock %}
+{% block content %} CONTENT {% endblock %}
+{% block after_content %}{% endblock %}
+
+{% block scripts %}{% endblock %}
+
+<script type="text/javascript">
+  {% if encrypted_session %}
+    localStorage.setItem('encrypted_session', '{{ encrypted_session }}');
+    localStorage.setItem('session_date', Date.now().toString())
+  {% endif %}
+</script>
+</body>
+
+</html>

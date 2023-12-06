@@ -1,0 +1,126 @@
+{% extends 'base.html' %}
+
+{% load bootstrap4 %}
+
+{% block content %}
+  <div class="container">
+    {% autoescape off %}{% bootstrap_messages %}{% endautoescape %}
+    <h3>{% block title %}Calendar{% endblock %}</h3>
+    <div class="agenda">
+      <div class="table-responsive">
+        <table class="table table-condensed table-bordered">
+          <tbody>
+          {% for k, v in markers.items %}
+            {% if forloop.first or k|date:"w" == "0" %}
+              <tr>
+              {# Iterate over the first few days of the week to get to the first day #}
+              {% if forloop.first %}
+                {% with k|date:"w"|add:0 as day %}
+                  {% for item in "x"|rjust:day %}
+                    <td></td>
+                  {% endfor %}
+                {% endwith %}
+              {% endif %}
+            {% endif %}
+          <td class="agenda-date" style="{% if k|date:"d"|add:0 < 8 %}border-top:3px solid black; {% endif %}
+            {% if k|date:"d"|add:0 == 1 and k|date:"w"|add:0 != 0 %}border-left:3px solid black; {% endif %}">
+            <div>
+              <div class="dayofmonth">{{ k|date:"d" }}</div>
+              <div class="dayofweek">{{ k|date:"l" }}</div>
+              <div class="shortdate text-muted">{{ k|date:"F" }}, {{ k|date:"Y" }}</div>
+              <div class="agenda-events">
+                {% for item in v.markers %}
+                  <div class="agenda-event">
+                    - {{ item }}
+                  </div>
+                {% endfor %}
+              </div>
+              <div class="text-center">
+                {% if v.submitted %}
+                  <i class="fas fa-check fa-3x text-success"></i>
+                {% else %}
+                  <i class="fas fa-times fa-3x text-danger"></i>
+                {% endif %}
+              </div>
+              <div>
+                {% if v.submitted %}
+                  {% for substance, value in v.substances.items %}
+                    <div class="substance">
+                      - {{ value.label }}: {% if value.answer_display %}
+                      {{ value.answer_display }}
+                    {% else %}
+                      {{ value.answer }}
+                    {% endif %}
+                    </div>
+                  {% endfor %}
+                  <a class="text-warning" href="{% url 'step3' %}?date={{ k|date:"m/d/y" }}"
+                     onclick="return confirm('This will erase your existing entry. Are you sure you would like to edit your responses?')">Re-enter
+                    Substances</a>
+                {% else %}
+                  <a href="{% url 'step3' %}?date={{ k|date:"m/d/y" }}">Enter Substances</a>
+                {% endif %}
+              </div>
+
+            </div>
+          </td>
+          {% if forloop.last or k|date:"w"|add:0 == 6 %}
+            </tr>
+          {% endif %}
+          {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      <div>
+        <a href="{% url 'step4' %}"
+           class="btn {% if not finished %}btn-secondary disabled{% else %}btn-success {% endif %}"
+           {% if not finished %}disabled{% endif %}>Submit All Responses</a>
+      </div>
+    </div>
+  </div>
+
+{% endblock %}
+
+
+{% block css %}
+  <style>
+    .agenda {
+    }
+
+    /* Dates */
+    .agenda .agenda-date {
+      width: 170px;
+    }
+
+    .agenda .agenda-date .dayofmonth {
+      width: 40px;
+      font-size: 30px;
+      line-height: 30px;
+      float: left;
+      text-align: right;
+      margin-right: 10px;
+    }
+
+    .agenda .agenda-date .dayofweek {
+      font-size: 0.75em;
+    }
+
+    .agenda .agenda-date .shortdate {
+      font-size: 0.75em;
+    }
+
+    /* Events */
+    .agenda .agenda-events {
+    }
+
+    .substance {
+      color: darkred;
+    }
+
+    .agenda .agenda-events .agenda-event {
+    }
+    .container{
+      margin-top: 40px;
+      margin-bottom: 80px;
+    }
+  </style>
+{% endblock %}
