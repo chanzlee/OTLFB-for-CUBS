@@ -14,7 +14,7 @@ ALLOWED_HOSTS = '*'
 DEBUG = os.getenv('DJANGO_DEBUG', 'True') == 'True'
 USE_CELERY = os.getenv('DJANGO_USE_CELERY', 'True') == 'True'
 
-TIME_ZONE = 'America/Denver'
+TIME_ZONE = 'UTC'
 LANGUAGE_CODE = 'en-us'
 SITE_ID = 1
 USE_I18N = False
@@ -66,7 +66,7 @@ MIDDLEWARE = [
 
 DATABASES = {}
 DATABASES['default'] = dj_database_url.config(conn_max_age=600,
-                                              default='postgres://localhost:5434/{}'.format(APP_NAME))
+                                              default='postgres://localhost:5432/{}'.format(APP_NAME))
 SESSION_EXPIRE_SECONDS = 5400
 SESSION_EXPIRE_AFTER_LAST_ACTIVITY = True
 SESSION_TIMEOUT_REDIRECT = '/timeout/'

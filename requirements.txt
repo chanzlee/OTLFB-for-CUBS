@@ -3,7 +3,7 @@ dj-database-url==0.5.0                       # DB config via ENV vars
 Django==2.2.13                               # Web framework
 django-bootstrap4==0.0.7                     # Bootstrap 4 support
 gunicorn==19.9.0                             # Threaded WSGI server
-psycopg2-binary>=2.7.7                       # Postgres connector
+psycopg2-binary==2.8.6                       # Postgres connector
 pytz==2018.9                                 # Timezone support
 whitenoise==4.1.2                            # Serve static files via app server
 django-extensions==2.1.4                     # Various Django extras
@@ -14,6 +14,7 @@ django-formtools==2.1                        # Form Wizards
 django-tz-detect==0.2.9                      # Detect end user's timezone
 requests==2.21.0                             # to easily make a post
 django-dynamic-formsets==0.0.8               # for javascript formsets
+greenlet==1.1.3
 
 ## PRODUCTION REQUIREMENTS
 celery==4.2.1                                # asynchronous worker tasks
